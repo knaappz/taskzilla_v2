@@ -1,2 +1,2 @@
 # tasskzilla_v2
-Projekt osobistego planera na urządzenia mobilne.
+Druga wersja osobistego planera na urządzenia mobilne - Tasskzilla.
