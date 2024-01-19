@@ -1,14 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:taskzilla/buttons/newbtn.dart';
 import 'package:taskzilla/pages/completed.dart';
 import 'package:taskzilla/pages/homepage.dart';
 import 'package:taskzilla/pages/important.dart';
-import 'package:taskzilla/pages/task_creator.dart';
+import 'package:taskzilla/tiles/task_creator.dart';
 
 class MainSite extends StatefulWidget {
   const MainSite({Key? key}) : super(key: key);
+  
 
   @override
   State<MainSite> createState() => _MainSiteState();
@@ -16,11 +17,13 @@ class MainSite extends StatefulWidget {
 
 class MyColors {
   static const Color bgpages = Color.fromARGB(255, 34, 33, 33);
+  static const Color bg = Color.fromARGB(255, 34, 33, 33);
+  static const Color bgappbar = Color.fromARGB(255, 48, 47, 47);
+  static const Color bgnav = Colors.white;
 }
 
 class _MainSiteState extends State<MainSite> {
-  final PageController _pageController = PageController(initialPage: 0);
-  int _pageIndex = 0;
+  int selectedIndex = 0;
 
   void createNewTask() {
     showDialog(
@@ -35,15 +38,21 @@ class _MainSiteState extends State<MainSite> {
 
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      HomePage(),
+      CompletedPage(),
+      ImportantPage()
+    ];
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: MyColors.bgpages,
+      backgroundColor: MyColors.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: MyColors.bgappbar,
         title: Center(
             child: Text(
           'TASKZILLA',
           style: TextStyle(
+            color: Colors.white,
               fontFamily: 'LondrinaSolid',
               fontSize: 40,
               fontWeight: FontWeight.w300),
@@ -53,57 +62,27 @@ class _MainSiteState extends State<MainSite> {
       floatingActionButton: AddBTN(
         onPressed: createNewTask,
       ),
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (int index) {
-          setState(
-            () {
-              _pageIndex = index;
-            },
-          );
-        },
-        children: _taskzillapages(),
-      ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(top: 0, bottom: 15, right: 15, left: 15),
-        child: BottomNavigationBar(
-          elevation: 0,
-          items: _buildFourItems(),
-          onTap: (int index) {
-            _pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-            );
-          },
-          currentIndex: _pageIndex,
-          fixedColor: Colors.orange,
-        ),
-      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: MyColors.bgnav,
+        unselectedItemColor: MyColors.bgpages,
+        selectedItemColor: Colors.orange,
+        currentIndex: selectedIndex,
+        onTap: (index) => setState(() {
+          selectedIndex = index;
+        }),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: 'Home'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check),
+            label: 'Completed'
+            ),
+          BottomNavigationBarItem(icon: Icon(Icons.warning_rounded),
+            label: 'Important'
+          ),
+        ]),
     );
-  }
-
-  List<Widget> _taskzillapages() {
-    return <Widget>[HomePage(), CompletedPage(), ImportantPage()];
-  }
-
-  List<BottomNavigationBarItem> _buildFourItems() {
-    return const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(
-          Icons.home,
-        ),
-        label: 'Home',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.check),
-        label: 'Done',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.warning_rounded),
-        label: 'Important',
-      ),
-    ];
   }
 }
