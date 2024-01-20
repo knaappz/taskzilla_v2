@@ -14,7 +14,7 @@ class _CompletedPageState extends State<CompletedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.bgpages,
+      backgroundColor: MyColors.bg,
       body: Padding(
         padding: const EdgeInsets.all(70.0),
         child: Container(
